@@ -5,27 +5,91 @@
 package model;
 
 import java.util.ArrayList;
+import java.time.LocalDate;
 
 /**
  *
  * @author vishwashah
  */
 public class PatientDirectory {
-    private ArrayList<Patient>patient_list;
-    public PatientDirectory(){
-        patient_list= new ArrayList<>();
+    
+    ArrayList<Patient> patientList;
+    Sys syst;
+    
+    public PatientDirectory(Sys syst){
+        
+        patientList = new ArrayList<Patient>();
+        this.syst = syst;
         
     }
-
-    public ArrayList<Patient> getPatient_list() {
-        return patient_list;
+    
+    
+     public Patient getPatientById(int id){
+        
+       for(Patient p: patientList){
+            
+            if(p.matchById(id)){
+                return p;
+            }
+            
+            //Patient not found
+            
+        }
+        return null;
+        
     }
-
-    public void setPatient_list(ArrayList<Patient> patient_list) {
-        this.patient_list = patient_list;
+    
+    public Patient createPatient(Person person){
+        
+        //Create person
+        Patient newPatient = new Patient(person);
+        
+        //Add created person to a list
+        patientList.add(newPatient);
+        
+        return newPatient;
+        
     }
-    public void addNewPatient(Patient patient){
-        patient_list.add(patient);
+    
+    public Patient searchPatientByName(String name){
+        
+        for(Patient p: patientList){
+            
+            if(p.matchByName(name)){
+                return p;
+            }
+            
+            //Patient not found
+            
+        }
+        return null;
+    }
+    
+    public void getPatientLatestEncounter(Patient pat){
+    
+        ArrayList<Encounter> eccList = pat.getEncounterHistory().getEncounterList();
+        int len = eccList.size();
+        
+        
+        Encounter lastestEncounter = eccList.get(len-1);
+        
+        System.out.println("BP_LOW: "+lastestEncounter.getVital().getBloodPressure_LOW());
+        
+        
+    }
+     public Patient getPatientFromEncounter(Encounter encounter){
+        
+        for(Patient pat:this.getPatientList()){
+            
+            if(pat.getEncounterHistory().getEncounterList().contains(encounter))
+                return pat;
+        
+        }
+        
+        return null;
+    }
+    public ArrayList<Patient> getPatientList() {
+        return patientList;
     }
     
     

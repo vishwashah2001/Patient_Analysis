@@ -4,75 +4,65 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author vishwashah
  */
 public class Patient {
-    private int patient_id;
-    private String patient_firstname;
-    private String patient_lastname;
-    private int patient_age;
-    private String patient_community;
-    private String patient_city;
-    private int patient_house;
-
-    public int getPatient_id() {
-        return patient_id;
+    
+    private long id;
+    Person person;
+    static long count = 0;
+    EncounterHistory encounterHistory;
+    
+    public Patient(Person person){
+        
+        count += 1;
+        this.id = count;
+        this.person = person;
+        
+        //Create patient specific encounter history 
+        this.encounterHistory = createEncounterHistory();
+        
+    }
+    
+    
+    
+    
+    public EncounterHistory createEncounterHistory(){
+        
+        return new EncounterHistory(this);
     }
 
-    public void setPatient_id(int patient_id) {
-        this.patient_id = patient_id;
+    public EncounterHistory getEncounterHistory() {
+        return encounterHistory;
     }
-
-    public String getPatient_firstname() {
-        return patient_firstname;
+    
+    public ArrayList<Encounter> getPatientEncounterHistory(){
+        
+        return this.encounterHistory.getEncounterList();
+        
     }
-
-    public void setPatient_firstname(String patient_firstname) {
-        this.patient_firstname = patient_firstname;
+    
+    public long getId() {
+        return id;
     }
-
-    public String getPatient_lastname() {
-        return patient_lastname;
+    
+    public boolean matchByName(String name){
+        
+        return this.person.matchByName(name);
     }
-
-    public void setPatient_lastname(String patient_lastname) {
-        this.patient_lastname = patient_lastname;
+    
+    public boolean matchById(int id){
+        
+        return this.getId() == id;
     }
-
-    public int getPatient_age() {
-        return patient_age;
+    
+    public Person getPerson() {
+        return person;
     }
-
-    public void setPatient_age(int patient_age) {
-        this.patient_age = patient_age;
-    }
-
-    public String getPatient_community() {
-        return patient_community;
-    }
-
-    public void setPatient_community(String patient_community) {
-        this.patient_community = patient_community;
-    }
-
-    public String getPatient_city() {
-        return patient_city;
-    }
-
-    public void setPatient_city(String patient_city) {
-        this.patient_city = patient_city;
-    }
-
-    public int getPatient_house() {
-        return patient_house;
-    }
-
-    public void setPatient_house(int patient_house) {
-        this.patient_house = patient_house;
-    }
+    
   
-    
-    
 }

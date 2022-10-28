@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -11,35 +12,43 @@ import java.util.ArrayList;
  * @author vishwashah
  */
 public class Encounter {
-    private int encounter_num;
-    private int encounter_id;
-    private ArrayList<VitalSign>vitalsign_list;
-
-    public int getEncounter_num() {
-        return encounter_num;
+    
+    VitalSign vital;
+    private LocalDate lastVisitDate;
+    private long id;
+    static long count = 0;
+    
+    public Encounter(){
+        count = count + 1;
+        this.id = count;
     }
 
-    public void setEncounter_num(int encounter_num) {
-        this.encounter_num = encounter_num;
-    }
-
-    public int getEncounter_id() {
-        return encounter_id;
-    }
-
-    public void setEncounter_id(int encounter_id) {
-        this.encounter_id = encounter_id;
-    }
-
-    public ArrayList<VitalSign> getVitalsign_list() {
-        return vitalsign_list;
-    }
-
-    public void setVitalsign_list(ArrayList<VitalSign> vitalsign_list) {
-        this.vitalsign_list = vitalsign_list;
-    }
-    public void addVitalSign(VitalSign vitalSign){
-        this.vitalsign_list.add(vitalSign);
+    public long getId() {
+        return id;
     }
     
+    public VitalSign getVital() {
+        return vital;
+    }
+
+    public LocalDate getLastVisitDate() {
+        return lastVisitDate;
+    }
+    
+    public Encounter(VitalSign vital){
+        
+        this.lastVisitDate = LocalDate.now();
+        this.vital = vital;
+         count = count + 1;
+        this.id = count;    
+
+    }
+    
+   // @Override
+    //public String toString(){
+      //  UtilityFunctions util = new UtilityFunctions();
+        //return util.covertDateToString(this.getLastVisitDate());
+    //}
+    
 }
+

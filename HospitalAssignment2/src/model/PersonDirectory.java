@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -11,21 +12,27 @@ import java.util.ArrayList;
  * @author vishwashah
  */
 public class PersonDirectory {
-    private ArrayList<Person>person_list;
-    public PersonDirectory(){
-        person_list=new ArrayList<>();
+    
+    ArrayList<Person> personList;
+    Sys syst;
+    
+    public PersonDirectory(Sys syst){
+        
+        personList = new ArrayList<Person>();
+        this.syst = syst;
         
     }
-
-    public ArrayList<Person> getPerson_list() {
-        return person_list;
-    }
-
-    public void setPerson_list(ArrayList<Person> person_list) {
-        this.person_list = person_list;
-    }
-    public void addNewPerson(Person person){
-        person_list.add(person);
+    
+    public Person createPerson(long contactNo,String name,LocalDate dob){
+        
+        //Create person
+        Person newPerson = new Person(contactNo,name,dob);
+        
+        //Add created person to a list
+        personList.add(newPerson);
+        
+        return newPerson;
+        
     }
     
 }

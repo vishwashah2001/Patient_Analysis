@@ -8,6 +8,6 @@ package model;
  *
  * @author vishwashah
  */
-public class Hospital {
+public class Sys {
     
 }

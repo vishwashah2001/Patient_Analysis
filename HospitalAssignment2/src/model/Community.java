@@ -13,47 +13,52 @@ import java.util.Iterator;
  * @author vishwashah
  */
 public class Community {
+    
     private ArrayList<House> houseList;
     private String commName;
-    public void setCommName(String commName) {
-        
-        this.commName = commName;
-        
-    }
-    public Community (String commName){
-     this.houseList = new ArrayList<>();
-     this.commName = commName;
-    }
 
-    public ArrayList<House> getHouseList() {
+    public void setCommName(String commName) {
+        this.commName = commName;
+    }
+    
+    public Community(String commName){
+        this.houseList = new ArrayList<>();
+        this.commName = commName;
+    }
+    
+     public ArrayList<House> getHouseList() {
         return houseList;
     }
-    public House findPersonInCommunity(Person person ){
-        for (Iterator<House> it = this.getHouseList().iterator(); it.hasNext();) {
-            House house = it.next();
-            if(house.getFamiliyMembers.contains(person))
+    
+    public House findPersonInCommunity(Person person){
+    
+        for(House house:this.getHouseList())
+        
+            if(house.getFamiliyMembers().contains(person))
                 return house;
-        }
-        return null;
+    
+         return null;
     }
-    public House createHouse(int houseNum, String streetName,String community,String city)
-    {House newHouse = new House(houseNum, streetName, community, city);
-    this.getHouseList().add(newHouse);
-    return newHouse;
+    
+    public House createHouse(int houseNum,String streetName,
+                 String community,String city){
+        
+        House newHouse = new House( houseNum,  streetName,
+                  community, city);
+        this.getHouseList().add(newHouse);
+        return newHouse;
+        
     }
-      @Override
+    
+    
+    @Override
     public String toString(){
         return this.getCommName();
     }
 
-
     public String getCommName() {
         return commName;
     }
-
-   
-    
-   
     
     
 }

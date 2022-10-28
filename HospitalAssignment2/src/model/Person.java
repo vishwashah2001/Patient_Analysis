@@ -4,67 +4,60 @@
  */
 package model;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 /**
  *
  * @author vishwashah
  */
 public class Person {
-    private String fname;
-    private String lname;
+    
+    private String name;
     private int age;
-    private String city;
-    private String community;
-    private int HouseNo;
-
-    public String getFname() {
-        return fname;
+    private LocalDate dob;
+    private long contactNo;
+    private String addr;
+    
+    //Create a person
+    public Person(long contactNo,String name,LocalDate dob){
+       
+        this.name = name;
+        this.contactNo = contactNo;
+        this.age = calculateAge(dob);
+        this.dob = dob;
+        this.addr = "146 Bolyston St., Jamaica Plain, Boston, MA 02130";
     }
 
-    public void setFname(String fname) {
-        this.fname = fname;
+    public String getAddr() {
+        return addr;
     }
 
-    public String getLname() {
-        return lname;
+    
+    public int calculateAge(LocalDate birthDate){
+        return Period.between(birthDate, LocalDate.now()).getYears();
     }
 
-    public void setLname(String lname) {
-        this.lname = lname;
+    public String getName() {
+        return name;
     }
 
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public LocalDate getDob() {
+        return dob;
     }
 
-    public String getCity() {
-        return city;
+    public long getContactNo() {
+        return contactNo;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public boolean matchByName(String name) {
+        
+        return this.getName().equals(name);
     }
-
-    public String getCommunity() {
-        return community;
-    }
-
-    public void setCommunity(String community) {
-        this.community = community;
-    }
-
-    public int getHouseNo() {
-        return HouseNo;
-    }
-
-    public void setHouseNo(int HouseNo) {
-        this.HouseNo = HouseNo;
-    }
-    @Override
-    public String toString(){
-        return fname;
-    }
+    
+    
 }
