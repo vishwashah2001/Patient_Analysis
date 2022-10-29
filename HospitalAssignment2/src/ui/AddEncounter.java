@@ -21,9 +21,13 @@ public class AddEncounter extends javax.swing.JPanel {
     /**
      * Creates new form AddEncounter
      */
-    public AddEncounter() {
+     Patient selectedPatient;
+    Sys sys;
+    public AddEncounter(Sys sys) {
         initComponents();
+        this.sys=sys;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,15 +61,31 @@ public class AddEncounter extends javax.swing.JPanel {
 
         lblHighBP.setText("Diastolic Blood Pressure");
 
+        txtLowBP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLowBPActionPerformed(evt);
+            }
+        });
+
         lblPatientID.setText("Patient ID:");
 
         btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         lblTodayDate.setText("Today's Date:");
 
         lblPersonSearch.setText("Person Name:");
 
         btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -142,6 +162,74 @@ public class AddEncounter extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        if(!validations()){
+            return;
+        }
+        //savevalues
+        UtilityFunctions util = new UtilityFunctions();
+        double BP_LOW= util.convertToDouble(txtLowBP.getText());
+        double BP_HIGH=util.convertToDouble(txtHighBP.getText());
+        selectedPatient.getEncounterHistory().addEncounter(new VitalSign(BP_LOW,BP_HIGH));
+        JOptionPane.showMessageDialog(this, "Visit saved successfully!");
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        selectedPatient = sys.getPatDir().getPatientById(Integer.parseInt(txtSearchPatient.getText()));              
+        
+        
+         //Poplate Data on screen
+        if(!populateDetails(selectedPatient)){
+            
+            return;
+        }
+        
+        //Populate today's date for visit
+        populateDate();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void txtLowBPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLowBPActionPerformed
+        // TODO add your handling code here:
+       public void populateDate(){
+        
+        UtilityFunctions util = new UtilityFunctions();
+        
+        lblTodaysDate.setText(util.covertDateToString(LocalDate.now()));
+        
+    }
+    
+    public boolean populateDetails(Patient selectedPatient){
+    
+        //Patient section
+        return populatePersonSection(selectedPatient);
+        
+        
+        
+        
+        
+    }
+    
+    public boolean populatePersonSection(Patient selectedPatient){
+        
+        Person person;
+        try{
+             person = selectedPatient.getPerson();
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Patient not found!!");
+            return false;
+            
+        }
+        
+        UtilityFunctions utility = new UtilityFunctions();
+        
+        lblPersonNameSearched.setText(person.getName());
+        
+        return true;
+        
+    }//GEN-LAST:event_txtLowBPActionPerformed
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
@@ -158,4 +246,86 @@ public class AddEncounter extends javax.swing.JPanel {
     private javax.swing.JTextField txtLowBP;
     private javax.swing.JTextField txtSearchPatient;
     // End of variables declaration//GEN-END:variables
+public boolean validations(){
+        
+       UtilityFunctions utility = new UtilityFunctions();
+        
+        //Field validations
+        boolean valFlag = true;
+        int misCounter = 0;
+        int temp = 0;
+        
+        //Error Message
+        String errorMessage = "";
+        
+        //1. BP Low Number ***************************************************************************
+        
+        // TC.1 - No Null value
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation(".+",txtLowBP.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Missing value in BP-Low field"+"\n";
+        }
+        
+        //TC.2 - No special characters
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^([^!@#$%^&*()]*)$",txtLowBP.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Remove special characters in BP-Low field"+"\n";
+        }
+        
+        //TC.3 - Only numbers
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^[0-9]+$",txtLowBP.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Please enter numbers in BP-Low field"+"\n";
+        }
+        
+        //2. BP High Number ***************************************************************************
+        
+        // TC.1 - No Null value
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation(".+",txtHighBP.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Missing value in BP-High field"+"\n";
+        }
+        
+        //TC.2 - No special characters
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^([^!@#$%^&*()]*)$",txtHighBP.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Remove special characters in BP-High field"+"\n";
+        }
+        
+        //TC.3 - Only numbers
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^[0-9]+$",txtHighBP.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Please enter numbers in BP-High field"+"\n";
+        }
+        
+       // ********************************************************************************************
+        // Check validations
+        if(misCounter > 0){
+           JOptionPane.showMessageDialog(this, errorMessage);
+           valFlag = false;
+        }
+        // ********************************************************************************************
+        
+        
+        return valFlag;
+        
+    }
 }

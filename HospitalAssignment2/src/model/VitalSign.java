@@ -9,29 +9,25 @@ package model;
  * @author vishwashah
  */
 public class VitalSign {
-    
-    private double bloodPressure_LOW;
-    private double bloodPressure_HIGH;
-    
-    
-    public VitalSign(double bloodPressure_LOW,double bloodPressure_HIGH){
-       
-        this.bloodPressure_LOW = bloodPressure_LOW;
-        this.bloodPressure_HIGH = bloodPressure_HIGH;
+        
+    private double blood_press;
+    private double respiratory_rate;
+
+    public double getBloodpressure() {
+        return blood_press;
     }
 
-    public double getBloodPressure_LOW() {
-        return bloodPressure_LOW;
+    public void setBloodpressure(double bloodpressure) {
+        this.blood_press = bloodpressure;
+    }
+
+    public double getRespiratoryrate() {
+        return respiratory_rate;
+    }
+
+    public void setRespiratoryrate(double respiratoryrate) {
+        this.respiratory_rate = respiratoryrate;
+    }
     }
     
-    public double getBloodPressure_HIGH() {
-        return bloodPressure_HIGH;
-    }
-     public void setBloodPressure_HIGH(double bloodPressure_HIGH) {
-        this.bloodPressure_HIGH = bloodPressure_HIGH;
-    }
-     
-     public void setBloodPressure_LOW(double bloodPressure_LOW) {
-        this.bloodPressure_LOW = bloodPressure_LOW;
-    }}
 

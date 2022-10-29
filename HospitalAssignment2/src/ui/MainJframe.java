@@ -4,7 +4,17 @@
  */
 package ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import model.EncounterHistory;
+import model.PatientDirectory;
+import model.Person;
 import model.PersonDirectory;
+import model.Sys;
 
 /**
  *
@@ -15,11 +25,22 @@ public class MainJframe extends javax.swing.JFrame {
     /**
      * Creates new form MainJframe
      */
-    PersonDirectory person_dir;
-    
+   PersonDirectory person_Dir;
+    PatientDirectory patient_Dir;
+    EncounterHistory encounter_history;
+    PatientDirectory ab_patient;
+    EncounterHistory ab_encounter;
     public MainJframe() {
         initComponents();
+        
+        person_Dir = getDataFromCSV();
+                
+        patient_Dir = new PatientDirectory();
+        encounter_history = new EncounterHistory();
+        ab_patient = new PatientDirectory();
+        ab_encounter = new EncounterHistory();
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,13 +51,11 @@ public class MainJframe extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSplitPane1 = new javax.swing.JSplitPane();
+        SplitPanel = new javax.swing.JSplitPane();
         ControlArea = new javax.swing.JPanel();
-        btnHospital = new javax.swing.JButton();
-        btnpatient = new javax.swing.JButton();
-        btnDoctor = new javax.swing.JButton();
-        btnEncounter = new javax.swing.JButton();
-        btnPeople = new javax.swing.JButton();
+        btnPatientDatabase = new javax.swing.JButton();
+        btnPersonDatabase = new javax.swing.JButton();
+        btnAbnormalCases = new javax.swing.JButton();
         WorkArea = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -44,47 +63,26 @@ public class MainJframe extends javax.swing.JFrame {
 
         ControlArea.setBackground(new java.awt.Color(0, 153, 153));
 
-        btnHospital.setText("Hospital");
+        btnPatientDatabase.setText("Patient");
+        btnPatientDatabase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPatientDatabaseActionPerformed(evt);
+            }
+        });
 
-        btnpatient.setText("Patient");
+        btnPersonDatabase.setText(" Person");
+        btnPersonDatabase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPersonDatabaseActionPerformed(evt);
+            }
+        });
 
-        btnDoctor.setText("Doctor");
-
-        btnEncounter.setText("Encounter");
-
-        btnPeople.setText("Person");
-
-        javax.swing.GroupLayout ControlAreaLayout = new javax.swing.GroupLayout(ControlArea);
-        ControlArea.setLayout(ControlAreaLayout);
-        ControlAreaLayout.setHorizontalGroup(
-            ControlAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ControlAreaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(ControlAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnEncounter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDoctor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnpatient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnHospital, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPeople, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        ControlAreaLayout.setVerticalGroup(
-            ControlAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ControlAreaLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(btnHospital)
-                .addGap(69, 69, 69)
-                .addComponent(btnpatient)
-                .addGap(61, 61, 61)
-                .addComponent(btnDoctor)
-                .addGap(63, 63, 63)
-                .addComponent(btnEncounter)
-                .addGap(65, 65, 65)
-                .addComponent(btnPeople)
-                .addContainerGap(161, Short.MAX_VALUE))
-        );
-
-        jSplitPane1.setLeftComponent(ControlArea);
+        btnAbnormalCases.setText("Abnormal Cases");
+        btnAbnormalCases.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbnormalCasesActionPerformed(evt);
+            }
+        });
 
         WorkArea.setBackground(new java.awt.Color(0, 102, 102));
 
@@ -108,26 +106,72 @@ public class MainJframe extends javax.swing.JFrame {
                 .addContainerGap(243, Short.MAX_VALUE))
         );
 
-        jSplitPane1.setRightComponent(WorkArea);
+        javax.swing.GroupLayout ControlAreaLayout = new javax.swing.GroupLayout(ControlArea);
+        ControlArea.setLayout(ControlAreaLayout);
+        ControlAreaLayout.setHorizontalGroup(
+            ControlAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ControlAreaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ControlAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnPersonDatabase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPatientDatabase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAbnormalCases, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(WorkArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        ControlAreaLayout.setVerticalGroup(
+            ControlAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ControlAreaLayout.createSequentialGroup()
+                .addGap(129, 129, 129)
+                .addComponent(btnPatientDatabase)
+                .addGap(61, 61, 61)
+                .addComponent(btnPersonDatabase)
+                .addGap(57, 57, 57)
+                .addComponent(btnAbnormalCases)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ControlAreaLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(WorkArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        SplitPanel.setLeftComponent(ControlArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(SplitPanel)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(SplitPanel)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
+    private void btnPersonDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPersonDatabaseActionPerformed
+        // TODO add your handling code here:
+      view_PersonDir viewDirectory = new view_PersonDir(person_Dir,patient_Dir,encounter_history);
+        
+        SplitPanel.setRightComponent(viewDirectory);
+    }//GEN-LAST:event_btnPersonDatabaseActionPerformed
+
+
+    private void btnAbnormalCasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbnormalCasesActionPerformed
+        // TODO add your handling code here:
+       view_abcases abnormalCases = new view_abcases(ab_patient,ab_encounter,person_Dir);
+        SplitPanel.setRightComponent(abnormalCases);
+    }//GEN-LAST:event_btnAbnormalCasesActionPerformed
+
+    private void btnPatientDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatientDatabaseActionPerformed
+        // TODO add your handling code here:
+        view_patientDir viewPatDirectory = new view_patientDir(patient_Dir, encounter_history,ab_patient,ab_encounter);
+        SplitPanel.setRightComponent(viewPatDirectory);
+                                               
+    }//GEN-LAST:event_btnPatientDatabaseActionPerformed
+public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -150,24 +194,56 @@ public class MainJframe extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainJframe.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new MainJframe().setVisible(true);
             }
         });
     }
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ControlArea;
+    private javax.swing.JSplitPane SplitPanel;
     private javax.swing.JPanel WorkArea;
-    private javax.swing.JButton btnDoctor;
-    private javax.swing.JButton btnEncounter;
-    private javax.swing.JButton btnHospital;
-    private javax.swing.JButton btnPeople;
-    private javax.swing.JButton btnpatient;
+    private javax.swing.JButton btnAbnormalCases;
+    private javax.swing.JButton btnPatientDatabase;
+    private javax.swing.JButton btnPersonDatabase;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JSplitPane jSplitPane1;
     // End of variables declaration//GEN-END:variables
+ private PersonDirectory getDataFromCSV() {
+       PersonDirectory csvData = new PersonDirectory();
+        Path pathToFile = Paths.get("C:\\Users\\shah0\\OneDrive\\Documents\\NetBeansProjects\\Assignment_4\\data.txt");
+        try(BufferedReader br = Files.newBufferedReader(pathToFile,StandardCharsets.US_ASCII)){
+            String line = br.readLine();
+            while(line!= null){
+            String[] attributes = line.split(" ");
+            Person person = addPerson(attributes);
+            csvData.addNewPerson(person);
+            line = br.readLine();
+            
+            }
+        }catch(IOException ioe){
+        ioe.printStackTrace();
+        }
+        return csvData;
+    }
+
+    private Person addPerson(String[] attributes) {
+        Person person = new Person();
+        person.setFirstname(attributes[0]);
+        person.setLastname(attributes[1]);
+        person.setPersonage(Integer.parseInt(attributes[2]));
+        person.setPersoncityname(attributes[3]);
+        person.setPersoncommunityname(attributes[4]);
+        person.setPersonhouseno(Integer.parseInt(attributes[5]));
+        return person;
+    }
 }

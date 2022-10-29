@@ -12,20 +12,26 @@ import java.util.ArrayList;
  */
 public class EncounterHistory {
     
-    private ArrayList<Encounter> encounterList;
-    
-    public EncounterHistory(Patient patient){
-        this.encounterList = new ArrayList<Encounter>();
+    private ArrayList<Encounter> encounter_history_list;
+
+    public EncounterHistory() {
+        encounter_history_list = new ArrayList<>();
     }
 
-    public ArrayList<Encounter> getEncounterList() {
-        return encounterList;
+    
+    public ArrayList<Encounter> getEncounterHistoryList() {
+        return encounter_history_list;
+    }
+
+    public void setEncounterHistoryList(ArrayList<Encounter> encounterHistoryList) {
+        this.encounter_history_list = encounterHistoryList;
     }
     
-    public Encounter addEncounter(VitalSign vital){
-        
-        Encounter newEncounter = new Encounter(vital);
-        encounterList.add(newEncounter);
-        return newEncounter;
-    }}
+    public void addEncounterInList(Encounter encounter){
+        encounter_history_list.add(encounter);
+    }
+    
+    
+}
+
     

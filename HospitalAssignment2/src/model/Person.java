@@ -12,52 +12,65 @@ import java.time.Period;
  * @author vishwashah
  */
 public class Person {
-    
-    private String name;
+        
+    private String fname;
+    private String lname;
     private int age;
-    private LocalDate dob;
-    private long contactNo;
-    private String addr;
-    
-    //Create a person
-    public Person(long contactNo,String name,LocalDate dob){
-       
-        this.name = name;
-        this.contactNo = contactNo;
-        this.age = calculateAge(dob);
-        this.dob = dob;
-        this.addr = "146 Bolyston St., Jamaica Plain, Boston, MA 02130";
+    private String city;
+    private String community;
+    private int HouseNo;
+
+    public String getFirstname() {
+        return fname;
     }
 
-    public String getAddr() {
-        return addr;
+    public void setFirstname(String firstname) {
+        this.fname = firstname;
     }
 
-    
-    public int calculateAge(LocalDate birthDate){
-        return Period.between(birthDate, LocalDate.now()).getYears();
+    public String getLastname() {
+        return lname;
     }
 
-    public String getName() {
-        return name;
+    public void setLastname(String lastname) {
+        this.lname = lastname;
     }
 
-    public int getAge() {
+    public int getPersonage() {
         return age;
     }
 
-    public LocalDate getDob() {
-        return dob;
+    public void setPersonage(int personage) {
+        this.age = personage;
     }
 
-    public long getContactNo() {
-        return contactNo;
+    public String getPersoncityname() {
+        return city;
     }
 
-    public boolean matchByName(String name) {
-        
-        return this.getName().equals(name);
+    public void setPersoncityname(String personcityname) {
+        this.city = personcityname;
+    }
+
+    public String getPersoncommunityname() {
+        return community;
+    }
+
+    public void setPersoncommunityname(String personcommunityname) {
+        this.community = personcommunityname;
+    }
+
+    public int getPersonhouseno() {
+        return HouseNo;
+    }
+
+    public void setPersonhouseno(int personhouseno) {
+        this.HouseNo = personhouseno;
     }
     
-    
+    @Override
+    public String toString(){
+        return fname;
+    }
+      
 }

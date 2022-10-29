@@ -4,6 +4,13 @@
  */
 package ui;
 
+import javax.swing.JOptionPane;
+import model.Community;
+import model.House;
+import model.Person;
+import model.Sys;
+import utility.UtilityFunctions;
+
 /**
  *
  * @author vishwashah
@@ -13,8 +20,10 @@ public class AddPerson extends javax.swing.JPanel {
     /**
      * Creates new form AddPerson
      */
-    public AddPerson() {
+     Sys sys;
+    public AddPerson(Sys sys) {
         initComponents();
+        this.sys=sys;
     }
 
     /**
@@ -27,7 +36,7 @@ public class AddPerson extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel4 = new javax.swing.JLabel();
-        tctContactNo = new javax.swing.JTextField();
+        txtContactNo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         lblCommunity = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -72,6 +81,11 @@ public class AddPerson extends javax.swing.JPanel {
         cmbDOBMMM.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnSavePatient.setText("Save");
+        btnSavePatient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSavePatientActionPerformed(evt);
+            }
+        });
 
         cmbDOBYYYY.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -111,7 +125,7 @@ public class AddPerson extends javax.swing.JPanel {
                                         .addComponent(jLabel8))
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(tctContactNo)
+                                            .addComponent(txtContactNo)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(cmbDOBDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
@@ -148,7 +162,7 @@ public class AddPerson extends javax.swing.JPanel {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(tctContactNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtContactNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
                     .addComponent(txtHouseNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -175,6 +189,35 @@ public class AddPerson extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStreetNameActionPerformed
 
+    private void btnSavePatientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSavePatientActionPerformed
+        // TODO add your handling code here:
+         UtilityFunctions util = new UtilityFunctions();
+        
+        if(!validation()){
+            return;
+        }
+        
+        String name = txtName.getText();
+       // String house = txtHouseNum.getText();
+       // String streetName = txtStreetName.getText();
+        String DOB_DD = cmbDOBDD.getSelectedItem().toString();
+        String DOB_MMM = cmbDOBMMM.getSelectedItem().toString();
+        String DOB_YYYY = cmbDOBYYYY.getSelectedItem().toString();
+        String tel = txtContactNo.getText();
+        
+        //Create person
+        Person newPerson = sys.getPerDir().createPerson(util.convertToLong(tel), name, util.convertToDate(DOB_DD+"-"+DOB_MMM+"-"+DOB_YYYY));
+       
+        Community community = sys.getCity((String)cmbCity.getSelectedItem()).getCommunityByName((String)cmbCommunity.getSelectedItem());
+        House newHouse = community.createHouse(Integer.parseInt(txtHouseNum.getText()), txtStreetName.getText(), (String)cmbCommunity.getSelectedItem(), (String)cmbCity.getSelectedItem());
+        newHouse.addPersonToHouse(newPerson);
+        
+        //Show Message
+        JOptionPane.showMessageDialog(this, "Person added successfully!");
+        
+        //Show id
+    }//GEN-LAST:event_btnSavePatientActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSavePatient;
@@ -191,9 +234,134 @@ public class AddPerson extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel lblCommunity;
-    private javax.swing.JTextField tctContactNo;
+    private javax.swing.JTextField txtContactNo;
     private javax.swing.JTextField txtHouseNum;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtStreetName;
     // End of variables declaration//GEN-END:variables
+public boolean validation(){
+    
+        UtilityFunctions utility = new UtilityFunctions();
+        
+        //Field validations
+        boolean valFlag = true;
+        int misCounter = 0;
+        int temp = 0;
+        
+        //Error Message
+        String errorMessage = "";
+        
+        //1. Name ***************************************************************************
+        
+        // TC.1 - No Null value
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation(".+",txtName.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Missing value in Name field"+"\n";
+        }
+        
+        //TC.2 - Only Alphabets
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^[a-zA-Z]+ *[a-zA-Z]*$",txtName.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Invalid Name field"+"\n";
+        }
+        
+   
+        
+        //2. Contact Number ***************************************************************************
+        
+        // TC.1 - No Null value
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation(".+",txtContactNo.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Missing value in Contact Number field"+"\n";
+        }
+        
+        
+        
+        //TC.2 - Only numbers
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^[0-9]{10}$",txtContactNo.getText());
+        
+        //Add message
+        if(temp != misCounter){
+            errorMessage = errorMessage + "Please enter 10 digit in Contact Number field"+"\n";
+        }
+        
+        
+        //3. Street ***************************************************************************
+
+
+
+        // TC.1 - No Null value
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation(".+",txtStreetName.getText());
+
+
+
+        //Add message
+        if(temp != misCounter){
+        errorMessage = errorMessage + "Street is blank"+"\n";
+        }
+
+
+
+        //TC.2 - Only characters
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^[a-zA-Z]+ *[a-zA-Z]*+$",txtStreetName.getText());
+
+
+
+        //Add message
+        if(temp != misCounter){
+        errorMessage = errorMessage + "Invalid Street"+"\n";
+        }
+        
+        //4. House Number ***************************************************************************
+
+
+
+        // TC.1 - No Null value
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation(".+",txtHouseNum.getText());
+
+
+
+        //Add message
+        if(temp != misCounter){
+        errorMessage = errorMessage + "House field is blank"+"\n";
+        }
+
+
+
+        //TC.2 - Only characters
+        temp = misCounter;
+        misCounter = misCounter + utility.runValidation("^[0-9]+$",txtHouseNum.getText());
+
+
+
+        //Add message
+        if(temp != misCounter){
+        errorMessage = errorMessage + "Invalid House"+"\n";
+        }
+        
+        // ********************************************************************************************
+        // Check validations
+        if(misCounter > 0){
+           JOptionPane.showMessageDialog(this, errorMessage);
+           valFlag = false;
+        }
+        // ********************************************************************************************
+        
+        
+        return valFlag;
+    }
+    
 }

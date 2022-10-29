@@ -12,27 +12,23 @@ import java.util.ArrayList;
  * @author vishwashah
  */
 public class PersonDirectory {
+    private ArrayList<Person> person_list;
     
-    ArrayList<Person> personList;
-    Sys syst;
-    
-    public PersonDirectory(Sys syst){
-        
-        personList = new ArrayList<Person>();
-        this.syst = syst;
-        
+    public PersonDirectory(){
+    person_list = new ArrayList<>();
+    }
+
+    public ArrayList<Person> getPersonList() {
+        return person_list;
+    }
+
+    public void setPersonList(ArrayList<Person> personList) {
+        this.person_list = personList;
     }
     
-    public Person createPerson(long contactNo,String name,LocalDate dob){
-        
-        //Create person
-        Person newPerson = new Person(contactNo,name,dob);
-        
-        //Add created person to a list
-        personList.add(newPerson);
-        
-        return newPerson;
-        
+    public void addNewPerson(Person person){
+    person_list.add(person);
     }
+    
     
 }

@@ -13,42 +13,42 @@ import java.util.ArrayList;
  */
 public class Encounter {
     
-    VitalSign vital;
-    private LocalDate lastVisitDate;
-    private long id;
-    static long count = 0;
+    private int encounter_num;
+    private int encounter_id;
+    private ArrayList<VitalSign> vitalsign_list;
+
+    public int getEncpatientid() {
+        return encounter_id;
+    }
+
+    public void setEncpatientid(int encpatientid) {
+        this.encounter_id = encpatientid;
+    }
     
     public Encounter(){
-        count = count + 1;
-        this.id = count;
+    vitalsign_list = new ArrayList<>();
     }
 
-    public long getId() {
-        return id;
-    }
-    
-    public VitalSign getVital() {
-        return vital;
+    public int getEncounterno() {
+        return encounter_num;
     }
 
-    public LocalDate getLastVisitDate() {
-        return lastVisitDate;
+    public void setEncounterno(int encounterno) {
+        this.encounter_num = encounterno;
     }
-    
-    public Encounter(VitalSign vital){
-        
-        this.lastVisitDate = LocalDate.now();
-        this.vital = vital;
-         count = count + 1;
-        this.id = count;    
 
+    public ArrayList<VitalSign> getVitalSignList() {
+        return vitalsign_list;
+    }
+
+    public void setVitalSignList(ArrayList<VitalSign> vitalSignList) {
+        this.vitalsign_list = vitalSignList;
     }
     
-   // @Override
-    //public String toString(){
-      //  UtilityFunctions util = new UtilityFunctions();
-        //return util.covertDateToString(this.getLastVisitDate());
-    //}
+    public void addVitalSign(VitalSign vitalSign){
+    this.vitalsign_list.add(vitalSign);
+            }
     
 }
+
 
