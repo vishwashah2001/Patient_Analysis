@@ -10,9 +10,12 @@ import javax.swing.table.DefaultTableModel;
 import model.City;
 import model.Community;
 import model.Encounter;
+import model.EncounterHistory;
 import model.House;
 import model.Patient;
+import model.PatientDirectory;
 import model.Person;
+import model.PersonDirectory;
 
 import model.Sys;
 import utility.UtilityFunctions;
@@ -27,89 +30,20 @@ public class ViewAbnormalities extends javax.swing.JPanel {
      * Creates new form ViewAbnormalities
      */
     
-     Sys sys;
-     private Encounter selectedEncounter;
-     Patient selectedPatient;
-     boolean abnormalitiesFlag = false;
-   
-     
-     public ViewAbnormalities(Sys sys) {
+    PatientDirectory ab_directory;
+    EncounterHistory ab_encounter;
+    PersonDirectory person_dir;
+    public ViewAbnormalities (PatientDirectory abnormalCases, EncounterHistory encounterHistory, PersonDirectory personDirectory) {
         initComponents();
-        this.sys=sys;
-       // populateTable();
-        makeUnEditable();
-        populateTableInitially();
-        clearFields();
-        emptyCommunityComboBox();
-        loadCommunity();
+        this.ab_directory = abnormalCases;
        
+        this.ab_encounter = encounterHistory;
+        this.person_dir = personDirectory;
+        lblTotal.setText(String.valueOf(this.person_dir.getPersonList().size()));
+        populateTable();
     }
-        public void makeUnEditable(){
+        
     
-        txtLowBP.setEnabled(false);
-        txtHighBP.setEnabled(false);       
-        btnDelete.setEnabled(false);
-        btnUpdate.setEnabled(false);
-        
-    }
-    
-     public void makeEditable(){
-    
-        txtLowBP.setEnabled(true);
-        txtHighBP.setEnabled(true);
-        
-    }
-    
-    public void loadCommunity(){
-    
-    
-    for(City city: sys.getCityList()){
-        
-        for(Community com: city.getCommList()){
-            cmbCommunitySearch.addItem(com.getCommName());
-        }
-        }   
-    }
-     public void emptyCommunityComboBox(){
-    
-        cmbCommunitySearch.removeAllItems();
-        cmbCommunitySearch.addItem("-");
-       
-    }
-     private void populateTableInitially() {
-        
-        DefaultTableModel model = (DefaultTableModel) tblView.getModel();
-        
-        //Delete empty rows
-        model.setRowCount(0);
-        
-        ArrayList<Encounter> allEncounter = new ArrayList<Encounter>();
-        
-        for(Patient allPatient:sys.getPatDir().getPatientList()){
-            
-            for(Encounter enc:allPatient.getEncounterHistory().getEncounterList()){
-
-                Object[] row = new Object[5]; // Number of elements in the table - 6
-                row[0] = enc;//.getName();
-                row[1] = sys.getPatDir().getPatientFromEncounter(enc).getId()+"";
-                row[2] = enc.getId();
-                row[3] = enc.getVital().getBloodPressure_LOW();
-                row[4] = enc.getVital().getBloodPressure_HIGH();
-
-                model.addRow(row);
-            }
-        }
-        
-        
-        }
-     
-      public void clearFields(){
-        
-       
-        txtLowBP.setText("");
-        txtHighBP.setText("");
-        
-    }
     
 
     /**
@@ -122,45 +56,43 @@ public class ViewAbnormalities extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblView = new javax.swing.JTable();
+        tblAbnormalCases = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        cmbCommunitySearch = new javax.swing.JComboBox<>();
+        comboBoxSearch = new javax.swing.JComboBox<>();
         btnSearch = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtLowBP = new javax.swing.JTextField();
-        txtHighBP = new javax.swing.JTextField();
-        btnView = new javax.swing.JButton();
-        btnUpdate = new javax.swing.JButton();
+        lblTotal = new javax.swing.JLabel();
+        jabnormalcases = new javax.swing.JLabel();
+        jabnormalcases1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(0, 102, 102));
         setForeground(new java.awt.Color(255, 255, 255));
 
-        tblView.setBackground(new java.awt.Color(204, 204, 204));
-        tblView.setModel(new javax.swing.table.DefaultTableModel(
+        tblAbnormalCases.setBackground(new java.awt.Color(204, 204, 204));
+        tblAbnormalCases.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Date", "Patient ID", "Encounter ID", "Systolic Blood Pressure", "Diastolic Blood Pressure"
+                "PatientID", "First Name", "Last Name", "Age", "Community", "City", "House"
             }
         ));
-        jScrollPane2.setViewportView(tblView);
+        jScrollPane2.setViewportView(tblAbnormalCases);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 36)); // NOI18N
-        jLabel1.setText("View Encounter Details");
+        jLabel1.setText("Abnormal Case View");
 
+        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
         jLabel2.setText("Community");
 
-        cmbCommunitySearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cmbCommunitySearch.addActionListener(new java.awt.event.ActionListener() {
+        comboBoxSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBoxSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbCommunitySearchActionPerformed(evt);
+                comboBoxSearchActionPerformed(evt);
             }
         });
 
@@ -171,425 +103,135 @@ public class ViewAbnormalities extends javax.swing.JPanel {
             }
         });
 
-        btnDelete.setText("Delete");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Systolic Blood Pressure:");
-
-        jLabel4.setText("Diastolic Blood Pressure:");
-
-        btnView.setText("View");
-        btnView.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewActionPerformed(evt);
-            }
-        });
-
-        btnUpdate.setText("Update");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
+        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 0, 14)); // NOI18N
+        jLabel3.setText("Total Population");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jScrollPane2)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(216, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(139, 139, 139))
-            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(44, 44, 44)
-                                .addComponent(cmbCommunitySearch, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31)
-                                .addComponent(btnSearch)
-                                .addGap(30, 30, 30)
-                                .addComponent(btnDelete))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addGap(23, 23, 23)
-                                    .addComponent(txtHighBP))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(txtLowBP, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(193, 193, 193)
-                        .addComponent(btnView)
-                        .addGap(29, 29, 29)
-                        .addComponent(btnUpdate)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(comboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSearch)
+                        .addGap(279, 279, 279))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 777, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(21, 21, 21))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(82, 82, 82))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(172, 172, 172))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(175, 175, 175)
+                .addComponent(jabnormalcases, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52)
+                .addComponent(jabnormalcases1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addContainerGap(51, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(lblTotal, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jabnormalcases, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jabnormalcases1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(cmbCommunitySearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSearch)
-                    .addComponent(btnDelete))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtLowBP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtHighBP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnView)
-                    .addComponent(btnUpdate))
-                .addContainerGap(148, Short.MAX_VALUE))
+                    .addComponent(comboBoxSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(72, 72, 72))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
-         populateTableBySearch();
-        
-    }                                         
-    
-     private void populateTableBySearch() {
-        
-        DefaultTableModel model = (DefaultTableModel) tblView.getModel();
-        
-        //Delete empty rows
-        model.setRowCount(0);
-        
-        //Filter patients by community & city
-        ArrayList<Patient> filteredPatients = new ArrayList<Patient>();
-        
-        //Get community wise filtered patients
-        filteredPatients.addAll(getFilteredPatientsTerritoryWise());
-                
-        //Create an array for search results
-        ArrayList<Encounter> searchList = new ArrayList<>();
-        
-        //Populate the list with search appropriate values
-        searchList.addAll(getFilteredEncountersList(filteredPatients));
-        
-        
-        for(Encounter enc:searchList){
-            
-            if(abnormalitiesFlag){
-                
-                //Conditions for Low & high BP
-                if(enc.getVital().getBloodPressure_LOW() < 120.5 && enc.getVital().getBloodPressure_LOW() > 114.5 && enc.getVital().getBloodPressure_HIGH() < 78.5 && enc.getVital().getBloodPressure_HIGH() > 75.5){
-                    continue;
-                }
-            }
-            
-                Object[] row = new Object[5]; // Number of elements in the table - 6
-                row[0] = enc;//.getName();
-                row[1] = sys.getPatDir().getPatientFromEncounter(enc).getId()+"";
-                row[2] = enc.getId();
-                row[3] = enc.getVital().getBloodPressure_LOW();
-                row[4] = enc.getVital().getBloodPressure_HIGH();
-            
-            model.addRow(row);
-        }
-        
-        if(searchList.size() == 0){
-            JOptionPane.showMessageDialog(this, "No results");
-        }
-        
-        abnormalitiesFlag = false;
-    }
-    
-      public ArrayList<Encounter> getFilteredEncountersList(ArrayList<Patient> filteredPatients){
-    
-        
-        ArrayList<Encounter> filteredEncounter = new ArrayList<Encounter>();
-        
-        for(Patient pat:filteredPatients){
-        
-            //List with all patients data
-            ArrayList<Encounter> allEncounter = pat.getEncounterHistory().getEncounterList();
-            
-            for(Encounter enc: allEncounter){
-                
-                filteredEncounter.add(enc);
-                
-                
-                
-            }
-            
-        }
-        
-        return filteredEncounter;
-    }
-     
-     
-    public ArrayList<Patient> getFilteredPatientsTerritoryWise(){
-        
-        ArrayList<Patient> patientList = new ArrayList<Patient>();
-        
-        //List with all patients data
-        ArrayList<Patient> allPatient = sys.getPatDir().getPatientList();
-        
-        //Get applied filters
-        
-        String communitySearch = (String)cmbCommunitySearch.getSelectedItem();
-       
-        
-        //Start filtering
-        int addPatientFilterPassCount = 0;
-        int nullFilterPassCount = 0;
-        
-        for(Patient individualPat:allPatient){
-            
-           //Initial count to 0
-           addPatientFilterPassCount = 0; 
-           nullFilterPassCount = 0;
-           
-            //Filter for manufacturer
-            if(!communitySearch.equals("-")){
-                try{
-                    House house = sys.findHouseInCity(individualPat.getPerson());
-                    
-                    if(house.getCommunity().equals(communitySearch)){
-                        addPatientFilterPassCount += 1;
-                    }
-                }catch(Exception e){
-                    
-                }
-            }else {
-                nullFilterPassCount += 1;
-            }
-            
-            
-            
-            
-            
-            if(addPatientFilterPassCount + nullFilterPassCount == 1){
-                patientList.add(individualPat);
-            }
-        }
-        
-        return patientList;
+         
     
      
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void cmbCommunitySearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCommunitySearchActionPerformed
+    private void comboBoxSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxSearchActionPerformed
         // TODO add your handling code here:
-
-    }//GEN-LAST:event_cmbCommunitySearchActionPerformed
-
-    private void btnViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewActionPerformed
-        // TODO add your handling code here:
-        int selectedRow = tblView.getSelectedRow();
-        
-        if(selectedRow < 0){
-            
-            JOptionPane.showMessageDialog(this, "Please select a row");
-        
-        }else{
-            
-            //Make them uneditable
-            makeUnEditable();
-                    
-            // Populate the fields
-            //onlySelectedCar = selectedRow;
-            
-            //Handle Null pointer for empty values
-            try{
-                DefaultTableModel model = (DefaultTableModel) tblView.getModel();
-                Encounter selectEncounter = (Encounter) model.getValueAt(selectedRow, 0);
-                selectedEncounter = selectEncounter;
-                populateFields(selectEncounter);
-            
-            }catch(Exception e){
-                JOptionPane.showMessageDialog(this, "Select valid entry");
-            }
-            
-            
+         String searchItem = comboBoxSearch.getSelectedItem().toString();
+        if(searchItem.length() == 0){
+            JOptionPane.showMessageDialog(this, "Please select a community");
         }
-        
-        
-        makeEditable();
-        
-        btnDelete.setEnabled(true);
-        btnUpdate.setEnabled(true);
-
-     
-    }//GEN-LAST:event_btnViewActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-         if(!validations()){
-            return;
+        PatientDirectory abPatientDirectory = new PatientDirectory();
+        for(Patient abPatient : ab_directory.getPatientList()){
+        if(abPatient.getPatientcommunity()!= null && abPatient.getPatientcommunity().contains(searchItem)){
+            abPatientDirectory.addNewPatient(abPatient);
+        }
+        populateSearchTable(abPatientDirectory);
+        jabnormalcases.setText("CASES IN"+" "+searchItem);
+        jabnormalcases1.setText(String.valueOf(abPatientDirectory.getPatientList().size()));
         }
 
-        saveValues();
-
-        JOptionPane.showMessageDialog(this, "Visit updated");
-
-        populateTableInitially();
-                                            
-
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-         sys.getPatDir().getPatientFromEncounter(selectedEncounter).getEncounterHistory().getEncounterList().remove(selectedEncounter);
-        
-        JOptionPane.showMessageDialog(this, "Record deleted");
-        
-        populateTableInitially();
-        
-        btnDelete.setEnabled(false);
-        btnUpdate.setEnabled(false);
-    }                                         
-      
-    
-    
-    public void saveValues(){
-        
-        UtilityFunctions util = new UtilityFunctions();
-        
-        double BP_LOW = util.convertToDouble(txtLowBP.getText());
-        double BP_HIGH = util.convertToDouble(txtHighBP.getText());
-        
-        
-        selectedEncounter.getVital().setBloodPressure_HIGH(BP_HIGH);
-        selectedEncounter.getVital().setBloodPressure_LOW(BP_LOW);
-       
-        
-    }
-    
-    
-    public boolean validations(){
-        
-       UtilityFunctions utility = new UtilityFunctions();
-        
-        //Field validations
-        boolean valFlag = true;
-        int misCounter = 0;
-        int temp = 0;
-        
-        //Error Message
-        String errorMessage = "";
-        
-       //1. BP Low Number ***************************************************************************
-        
-        // TC.1 - No Null value
-        temp = misCounter;
-        misCounter = misCounter + utility.runValidation(".+",txtLowBP.getText());
-        
-        //Add message
-        if(temp != misCounter){
-            errorMessage = errorMessage + "Missing value in BP-Low field"+"\n";
-        }
-        
-        //TC.2 - No special characters
-        temp = misCounter;
-        misCounter = misCounter + utility.runValidation("^([^!@#$%^&*()]*)$",txtLowBP.getText());
-        
-        //Add message
-        if(temp != misCounter){
-            errorMessage = errorMessage + "Remove special characters in BP-Low field"+"\n";
-        }
-        
-        //TC.3 - Only numbers
-        temp = misCounter;
-        misCounter = misCounter + utility.runValidation("^[0-9]+$",txtLowBP.getText());
-        
-        //Add message
-        if(temp != misCounter){
-            errorMessage = errorMessage + "Please enter numbers in BP-Low field"+"\n";
-        }
-        
-        //2. BP High Number ***************************************************************************
-        
-        // TC.1 - No Null value
-        temp = misCounter;
-        misCounter = misCounter + utility.runValidation(".+",txtHighBP.getText());
-        
-        //Add message
-        if(temp != misCounter){
-            errorMessage = errorMessage + "Missing value in BP-High field"+"\n";
-        }
-        
-        //TC.2 - No special characters
-        temp = misCounter;
-        misCounter = misCounter + utility.runValidation("^([^!@#$%^&*()]*)$",txtHighBP.getText());
-        
-        //Add message
-        if(temp != misCounter){
-            errorMessage = errorMessage + "Remove special characters in BP-High field"+"\n";
-        }
-        
-        //TC.3 - Only numbers
-        temp = misCounter;
-        misCounter = misCounter + utility.runValidation("^[0-9]+$",txtHighBP.getText());
-        
-        //Add message
-        if(temp != misCounter){
-            errorMessage = errorMessage + "Please enter numbers in BP-High field"+"\n";
-        }
-       
-       // ********************************************************************************************
-        // Check validations
-        if(misCounter > 0){
-           JOptionPane.showMessageDialog(this, errorMessage);
-           valFlag = false;
-        }
-        // ********************************************************************************************
-        
-        
-        return valFlag;
-        
-    }
-
-   
-    private void populateFields(Encounter selectedEncounter) {
-        
-            
-        txtLowBP.setText(selectedEncounter.getVital().getBloodPressure_LOW()+"");
-        txtHighBP.setText(selectedEncounter.getVital().getBloodPressure_HIGH()+"");
-        
-        
-    
-    }//GEN-LAST:event_btnDeleteActionPerformed
+    }//GEN-LAST:event_comboBoxSearchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton btnView;
-    private javax.swing.JComboBox<String> cmbCommunitySearch;
+    private javax.swing.JComboBox<String> comboBoxSearch;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tblView;
-    private javax.swing.JTextField txtHighBP;
-    private javax.swing.JTextField txtLowBP;
+    private javax.swing.JLabel jabnormalcases;
+    private javax.swing.JLabel jabnormalcases1;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JTable tblAbnormalCases;
     // End of variables declaration//GEN-END:variables
+private void populateTable() {
+       DefaultTableModel model = (DefaultTableModel) tblAbnormalCases.getModel();
+        model.setRowCount(0);
+        for (Patient patient: ab_directory.getPatientList()){
+        Object[] row = new Object[7];
+        row[0] = patient;
+        row[1] = patient.getPatientfirstname();
+        row[2] = patient.getPatientlastname();
+        row[3] = patient.getPatientage();
+        row[4] = patient.getPatientcommunity();
+        row[5] = patient.getPatientcity();
+        row[6] = patient.getPatienthouse();
+        model.addRow(row);
+    }
 }
+
+    private void populateSearchTable(PatientDirectory abPatientDirectory) {
+        DefaultTableModel model = (DefaultTableModel) tblAbnormalCases.getModel();
+        model.setRowCount(0);
+        for (Patient patient: abPatientDirectory.getPatientList()){
+        Object[] row = new Object[7];
+        row[0] = patient;
+        row[1] = patient.getPatientfirstname();
+        row[2] = patient.getPatientlastname();
+        row[3] = patient.getPatientage();
+        row[4] = patient.getPatientcommunity();
+        row[5] = patient.getPatientcity();
+        row[6] = patient.getPatienthouse();
+        model.addRow(row);
+        
+        }
+    }
+        }

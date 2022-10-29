@@ -153,7 +153,7 @@ public class MainJframe extends javax.swing.JFrame {
 
     private void btnPersonDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPersonDatabaseActionPerformed
         // TODO add your handling code here:
-      view_PersonDir viewDirectory = new view_PersonDir(person_Dir,patient_Dir,encounter_history);
+      AddPerson viewDirectory = new AddPerson(person_Dir,patient_Dir,encounter_history);
         
         SplitPanel.setRightComponent(viewDirectory);
     }//GEN-LAST:event_btnPersonDatabaseActionPerformed
@@ -161,13 +161,13 @@ public class MainJframe extends javax.swing.JFrame {
 
     private void btnAbnormalCasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbnormalCasesActionPerformed
         // TODO add your handling code here:
-       view_abcases abnormalCases = new view_abcases(ab_patient,ab_encounter,person_Dir);
+       ViewAbnormalities abnormalCases = new ViewAbnormalities(ab_patient,ab_encounter,person_Dir);
         SplitPanel.setRightComponent(abnormalCases);
     }//GEN-LAST:event_btnAbnormalCasesActionPerformed
 
     private void btnPatientDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPatientDatabaseActionPerformed
         // TODO add your handling code here:
-        view_patientDir viewPatDirectory = new view_patientDir(patient_Dir, encounter_history,ab_patient,ab_encounter);
+        AddPatient viewPatDirectory = new AddPatient(patient_Dir, encounter_history,ab_patient,ab_encounter);
         SplitPanel.setRightComponent(viewPatDirectory);
                                                
     }//GEN-LAST:event_btnPatientDatabaseActionPerformed
