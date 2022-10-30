@@ -16,9 +16,7 @@ import model.House;
 import model.Patient;
 import model.PatientDirectory;
 import model.Person;
-import model.Sys;
 import model.VitalSign;
-import utility.UtilityFunctions;
 
 /**
  *

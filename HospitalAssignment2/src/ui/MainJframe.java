@@ -14,7 +14,6 @@ import model.EncounterHistory;
 import model.PatientDirectory;
 import model.Person;
 import model.PersonDirectory;
-import model.Sys;
 
 /**
  *
@@ -56,8 +55,8 @@ public class MainJframe extends javax.swing.JFrame {
         btnPatientDatabase = new javax.swing.JButton();
         btnPersonDatabase = new javax.swing.JButton();
         btnAbnormalCases = new javax.swing.JButton();
-        WorkArea = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        WorkArea = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -84,28 +83,6 @@ public class MainJframe extends javax.swing.JFrame {
             }
         });
 
-        WorkArea.setBackground(new java.awt.Color(0, 102, 102));
-
-        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
-        jLabel1.setText("Login Page");
-
-        javax.swing.GroupLayout WorkAreaLayout = new javax.swing.GroupLayout(WorkArea);
-        WorkArea.setLayout(WorkAreaLayout);
-        WorkAreaLayout.setHorizontalGroup(
-            WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, WorkAreaLayout.createSequentialGroup()
-                .addContainerGap(221, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(145, 145, 145))
-        );
-        WorkAreaLayout.setVerticalGroup(
-            WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(WorkAreaLayout.createSequentialGroup()
-                .addGap(205, 205, 205)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(243, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout ControlAreaLayout = new javax.swing.GroupLayout(ControlArea);
         ControlArea.setLayout(ControlAreaLayout);
         ControlAreaLayout.setHorizontalGroup(
@@ -116,8 +93,6 @@ public class MainJframe extends javax.swing.JFrame {
                     .addComponent(btnPersonDatabase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPatientDatabase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnAbnormalCases, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(WorkArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ControlAreaLayout.setVerticalGroup(
@@ -130,18 +105,34 @@ public class MainJframe extends javax.swing.JFrame {
                 .addGap(57, 57, 57)
                 .addComponent(btnAbnormalCases)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ControlAreaLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(WorkArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         SplitPanel.setLeftComponent(ControlArea);
+
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 0, 24)); // NOI18N
+        jLabel1.setText("Login Page");
+        SplitPanel.setRightComponent(jLabel1);
+
+        WorkArea.setBackground(new java.awt.Color(0, 102, 102));
+
+        javax.swing.GroupLayout WorkAreaLayout = new javax.swing.GroupLayout(WorkArea);
+        WorkArea.setLayout(WorkAreaLayout);
+        WorkAreaLayout.setHorizontalGroup(
+            WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 732, Short.MAX_VALUE)
+        );
+        WorkAreaLayout.setVerticalGroup(
+            WorkAreaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 571, Short.MAX_VALUE)
+        );
+
+        SplitPanel.setRightComponent(WorkArea);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(SplitPanel)
+            .addComponent(SplitPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 875, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

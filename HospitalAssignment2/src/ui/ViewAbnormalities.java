@@ -17,8 +17,6 @@ import model.PatientDirectory;
 import model.Person;
 import model.PersonDirectory;
 
-import model.Sys;
-import utility.UtilityFunctions;
 
 /**
  *
