@@ -19,7 +19,7 @@ public class ComAdminMainFrame extends javax.swing.JPanel {
     /**
      * Creates new form ComAdminMainFrame
      */
-   PersonArray person;
+    PersonArray person;
     HospitalArray hospital;
     CommunityArray community;
     BookingArray booking;
